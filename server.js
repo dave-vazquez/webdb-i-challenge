@@ -20,9 +20,26 @@ server.get('/', async (req, res) => {
   }
 });
 
+server.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    let account = await db('accounts').where({ id });
+
+    res.status(200).json({
+      success: true,
+      account
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+});
+
 server.post('/', async (req, res) => {
   const account = req.body;
-  console.log(account);
+
   try {
     let rowsAffected = await db('accounts').insert(account);
 
@@ -78,7 +95,5 @@ server.delete('/:id', async (req, res) => {
     });
   }
 });
-
-// get, post put, delete,
 
 module.exports = server;
